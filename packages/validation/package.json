@@ -12,9 +12,10 @@
     "lint": "echo \"No lint configured\""
   },
   "dependencies": {
-  "zod": "^3.24.2"
-},
-"devDependencies": {
-  "typescript": "^5.8.2"
-}
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2",
+    "@types/node": "^22.14.1"
+  }
 }
