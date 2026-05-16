@@ -1,23 +1,21 @@
 const fs = require('fs');
 const path = require('path');
 
-console.log("--- DIRECTORY SEARCH ---");
-console.log("Current Dir (__dirname):", __dirname);
-
+console.log("--- DEBUG: LOOKING IN .BUILDS ---");
 try {
-    const root = path.join(__dirname, '..');
-    console.log("Root Folders:", fs.readdirSync(root));
-    
-    // Check if there is a .builds folder or similar
-    if (fs.existsSync(path.join(root, 'public_html'))) {
-        console.log("Inside public_html:", fs.readdirSync(path.join(root, 'public_html')));
+    const buildsPath = path.join(__dirname, '..', 'public_html', '.builds');
+    if (fs.existsSync(buildsPath)) {
+        console.log("Inside .builds:", fs.readdirSync(buildsPath));
+        
+        // If there is a "last-source" or similar folder inside .builds, let's look there
+        const subFolders = fs.readdirSync(buildsPath);
+        subFolders.forEach(folder => {
+             const subPath = path.join(buildsPath, folder);
+             if (fs.lstatSync(subPath).isDirectory()) {
+                 console.log(`Inside .builds/${folder}:`, fs.readdirSync(subPath));
+             }
+        });
     }
-} catch (err) {
-    console.error("Search failed:", err);
+} catch (e) {
+    console.error("Search failed:", e);
 }
-
-// Keep the old try-catch here so it still tries to run
-try {
-    const backendPath = path.join(__dirname, '..', 'public_html', 'apps', 'api', 'dist', 'index.js');
-    require(backendPath);
-} catch (e) {}
