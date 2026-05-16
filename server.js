@@ -1,21 +1,15 @@
-const fs = require('fs');
-const path = require('path');
+console.log("--- PROXY STARTING ---");
+console.log("Current Directory:", __dirname);
 
-console.log("--- DEBUG: LOOKING IN .BUILDS ---");
+// The deep path we found in the screenshots
+const deepPath = './apps/api/dist/apps/api/src/index.js';
+
 try {
-    const buildsPath = path.join(__dirname, '..', 'public_html', '.builds');
-    if (fs.existsSync(buildsPath)) {
-        console.log("Inside .builds:", fs.readdirSync(buildsPath));
-        
-        // If there is a "last-source" or similar folder inside .builds, let's look there
-        const subFolders = fs.readdirSync(buildsPath);
-        subFolders.forEach(folder => {
-             const subPath = path.join(buildsPath, folder);
-             if (fs.lstatSync(subPath).isDirectory()) {
-                 console.log(`Inside .builds/${folder}:`, fs.readdirSync(subPath));
-             }
-        });
-    }
-} catch (e) {
-    console.error("Search failed:", e);
+    console.log("Attempting to load backend from:", deepPath);
+    require(deepPath);
+    console.log("--- BACKEND LOADED SUCCESSFULLY ---");
+} catch (err) {
+    console.error("!!! CRITICAL ERROR STARTING BACKEND !!!");
+    console.error(err);
+    process.exit(1);
 }
